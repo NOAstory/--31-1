@@ -2,13 +2,14 @@ using System;
 
 class Program
 {
-    private const string addDossier = "1";
-    private const string printAllDossiers = "2";
-    private const string removeDossier = "3";
-    private const string searchByLastname = "4";
-    private const string exit = "5";
     static void Main()
     {
+        const string AddDossier = "1";
+        const string PrintAllDossiers = "2";
+        const string RemoveDossier = "3";
+        const string SearchByLastname = "4";
+        const string Exit = "5";
+
         string[] fullNames = new string[0];
         string[] positions = new string[0];
         bool isRunning = true;
@@ -16,34 +17,34 @@ class Program
         while (isRunning)
         {
             Console.WriteLine("\n=== Система управления досье ===");
-            Console.WriteLine($"{addDossier}) Добавить досье");
-            Console.WriteLine($"{printAllDossiers}) Вывести все досье");
-            Console.WriteLine($"{removeDossier}) Удалить досье");
-            Console.WriteLine($"{searchByLastname}) Поиск по фамилии");
-            Console.WriteLine($"{exit}) Выход");
+            Console.WriteLine($"{AddDossier}) Добавить досье");
+            Console.WriteLine($"{PrintAllDossiers}) Вывести все досье");
+            Console.WriteLine($"{RemoveDossier}) Удалить досье");
+            Console.WriteLine($"{SearchByLastname}) Поиск по фамилии");
+            Console.WriteLine($"{Exit}) Выход");
             Console.Write("Выберите действие: ");
 
             string choice = Console.ReadLine();
 
             switch (choice)
             {
-                case addDossier:
+                case AddDossier:
                     AddDossier(ref fullNames, ref positions);
                     break;
 
-                case printAllDossiers:
+                case PrintAllDossiers:
                     PrintAllDossiers(fullNames, positions);
                     break;
 
-                case removeDossier:
+                case RemoveDossier:
                     RemoveDossier(ref fullNames, ref positions);
                     break;
 
-                case searchByLastname:
+                case SearchByLastname:
                     SearchByLastName(fullNames, positions);
                     break;
 
-                case exit:
+                case Exit:
                     isRunning = false;
                     Console.WriteLine("Выход из программы.");
                     break;
@@ -54,6 +55,7 @@ class Program
             }
         }
     }
+
     static void AddDossier(ref string[] fullNames, ref string[] positions)
     {
         Console.Write("Введите ФИО: ");
@@ -62,12 +64,13 @@ class Program
         Console.Write("Введите должность: ");
         string position = Console.ReadLine();
 
-        fullNames = ExpandArray(fullNames, name);
-        positions = ExpandArray(positions, position);
+        fullNames = AddDataToArray(fullNames, name);
+        positions = AddDataToArray(positions, position);
 
         Console.WriteLine("Досье добавлено!");
     }
-    static string[] ExpandArray(string[] array, string newValue)
+
+    static string[] AddDataToArray(string[] array, string newValue)
     {
         string[] newArray = new string[array.Length + 1];
 
@@ -80,6 +83,7 @@ class Program
 
         return newArray;
     }
+
     static void PrintAllDossiers(string[] fullNames, string[] positions)
     {
         if (fullNames.Length == 0)
@@ -93,6 +97,7 @@ class Program
             Console.WriteLine($"{i + 1}) {fullNames[i]} - {positions[i]}");
         }
     }
+
     static void RemoveDossier(ref string[] fullNames, ref string[] positions)
     {
         if (fullNames.Length == 0)
@@ -108,23 +113,8 @@ class Program
         {
             int removeIndex = index - 1;
 
-            string[] newFullNames = new string[fullNames.Length - 1];
-            string[] newPositions = new string[positions.Length - 1];
-
-            for (int i = 0; i < removeIndex; i++)
-            {
-                newFullNames[i] = fullNames[i];
-                newPositions[i] = positions[i];
-            }
-
-            for (int i = removeIndex + 1; i < fullNames.Length; i++)
-            {
-                newFullNames[i - 1] = fullNames[i];
-                newPositions[i - 1] = positions[i];
-            }
-
-            fullNames = newFullNames;
-            positions = newPositions;
+            fullNames = RemoveDataFromArray(fullNames, removeIndex);
+            positions = RemoveDataFromArray(positions, removeIndex);
 
             Console.WriteLine("Досье удалено!");
         }
@@ -133,6 +123,24 @@ class Program
             Console.WriteLine("Неверный номер досье!");
         }
     }
+
+    static string[] RemoveDataFromArray(string[] array, int removeIndex)
+    {
+        string[] newArray = new string[array.Length - 1];
+
+        for (int i = 0; i < removeIndex; i++)
+        {
+            newArray[i] = array[i];
+        }
+
+        for (int i = removeIndex + 1; i < array.Length; i++)
+        {
+            newArray[i - 1] = array[i];
+        }
+
+        return newArray;
+    }
+
     static void SearchByLastName(string[] fullNames, string[] positions)
     {
         if (fullNames.Length == 0)
@@ -157,7 +165,7 @@ class Program
             }
         }
 
-        if (!isFound)
+        if (isFound == false)
         {
             Console.WriteLine("Досье с такой фамилией не найдены.");
         }
